@@ -43,10 +43,10 @@ export default function LoginPage() {
       <EmojiBackground />
 
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-black tracking-widest text-white uppercase sm:text-4xl">
+        <h1 className="text-4xl font-black tracking-widest text-white uppercase sm:text-5xl">
           Svvagy Finance
         </h1>
-        <p className="mt-2 text-xs font-bold tracking-widest text-zinc-400 uppercase">
+        <p className="mt-2.5 text-xs font-extrabold tracking-widest text-zinc-400 uppercase sm:text-sm">
           Manage Keuanganmu Dengan Sangat Mudah!
         </p>
       </div>
@@ -58,7 +58,7 @@ export default function LoginPage() {
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-6" autoComplete="off">
           <div>
             <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
               Email
@@ -66,10 +66,11 @@ export default function LoginPage() {
             <input
               type="email"
               required
+              autoComplete="off"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nama@email.com"
-              className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-emerald-500"
+              className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
             />
           </div>
 
@@ -80,25 +81,26 @@ export default function LoginPage() {
             <input
               type="password"
               required
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-emerald-500"
+              className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-emerald-600 py-3.5 text-xs font-black uppercase tracking-widest text-white transition hover:bg-emerald-500 active:scale-[0.99] disabled:opacity-50"
+            className="w-full border border-zinc-700 bg-zinc-950 py-3.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99] disabled:opacity-50"
           >
-            {loading ? 'Memproses...' : 'Masuk'}
+            {loading ? 'Memproses...' : 'MASUK'}
           </button>
         </form>
 
         <p className="mt-8 text-center text-xs font-medium text-zinc-400">
           Belum punya akun?{' '}
-          <Link href="/register" className="font-bold text-emerald-400 hover:text-emerald-300 hover:underline">
+          <Link href="/register" className="font-bold text-zinc-200 hover:text-white hover:underline">
             Daftar sekarang
           </Link>
         </p>
