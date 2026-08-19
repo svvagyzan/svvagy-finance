@@ -9,6 +9,7 @@ import EmojiBackground from '../../components/EmojiBackground';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -78,15 +79,24 @@ export default function LoginPage() {
             <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
               Password
             </label>
-            <input
-              type="password"
-              required
-              autoComplete="new-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
+                autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 pr-16 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-[calc(50%+4px)] -translate-y-1/2 text-[10px] font-black tracking-widest text-zinc-400 hover:text-white uppercase"
+              >
+                {showPassword ? 'HIDE' : 'SHOW'}
+              </button>
+            </div>
           </div>
 
           <button
