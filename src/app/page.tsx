@@ -9,7 +9,6 @@ import { History, BookOpen, LogOut } from 'lucide-react';
 
 export default function DashboardPage() {
   const supabase = createClient();
-  const [loading, setLoading] = useState(true);
   const [wallets, setWallets] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'pemasukan' | 'pengeluaran'>('pemasukan');
@@ -33,7 +32,6 @@ export default function DashboardPage() {
   }, []);
 
   const fetchData = async () => {
-    setLoading(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       window.location.href = '/login';
@@ -45,7 +43,6 @@ export default function DashboardPage() {
 
     setWallets(walletData || []);
     setTransactions(transData || []);
-    setLoading(false);
   };
 
   const totalIncome = transactions
@@ -126,14 +123,6 @@ export default function DashboardPage() {
     await supabase.auth.signOut();
     window.location.href = '/login';
   };
-
-  if (loading) {
-    return (
-      <main className="relative min-h-screen bg-zinc-950">
-        <EmojiBackground />
-      </main>
-    );
-  }
 
   return (
     <main className="relative min-h-screen p-4 pb-20 md:p-8">
