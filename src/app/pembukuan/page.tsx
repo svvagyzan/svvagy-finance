@@ -74,44 +74,72 @@ export default function PembukuanPage() {
   };
 
   const uploadProofFile = async (file: File) => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
-    const filePath = `proofs/${fileName}`;
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
+      const filePath = `proofs/${fileName}`;
 
-    const { error } = await supabase.storage.from('transfer-proofs').upload(filePath, file);
-    if (error) throw error;
+      const { error } = await supabase.storage.from('transfer-proofs').upload(filePath, file);
+      
+      if (error) {
+        console.error(error);
+        alert('Gagal mengunggah bukti transfer. Pastikan bucket "transfer-proofs" sudah dibuat di Supabase Storage dan diatur Public.');
+        return null;
+      }
 
-    const { data } = supabase.storage.from('transfer-proofs').getPublicUrl(filePath);
-    return data.publicUrl;
+      const { data } = supabase.storage.from('transfer-proofs').getPublicUrl(filePath);
+      return data.publicUrl;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   };
 
   const handleSaveDetail = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedAsset) return;
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    let proofUrl = null;
-    if (fileProof) {
-      proofUrl = await uploadProofFile(fileProof);
+    if (!selectedAsset) {
+      alert('Pilih aset terlebih dahulu!');
+      return;
     }
 
-    await supabase.from('asset_details').insert([
-      {
-        asset_id: selectedAsset.id,
-        user_id: user.id,
-        item_name: itemName,
-        amount: parseRawNumber(amount),
-        payment_method: paymentMethod,
-        proof_url: proofUrl,
-      },
-    ]);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        alert('Sesi pengguna tidak ditemukan. Silakan login kembali.');
+        return;
+      }
 
-    setItemName('');
-    setAmount('');
-    setPaymentMethod('');
-    setFileProof(null);
-    fetchAssetDetails(selectedAsset.id);
+      let proofUrl = null;
+      if (fileProof) {
+        proofUrl = await uploadProofFile(fileProof);
+      }
+
+      const { error } = await supabase.from('asset_details').insert([
+        {
+          asset_id: selectedAsset.id,
+          user_id: user.id,
+          item_name: itemName,
+          amount: parseRawNumber(amount),
+          payment_method: paymentMethod,
+          proof_url: proofUrl,
+        },
+      ]);
+
+      if (error) {
+        console.error(error);
+        alert(`Gagal menyimpan rincian: ${error.message}`);
+        return;
+      }
+
+      setItemName('');
+      setAmount('');
+      setPaymentMethod('');
+      setFileProof(null);
+      fetchAssetDetails(selectedAsset.id);
+    } catch (err: any) {
+      console.error(err);
+      alert('Terjadi kesalahan sistem saat menyimpan data.');
+    }
   };
 
   const handleDeleteDetail = async (detailId: string) => {
@@ -129,25 +157,39 @@ export default function PembukuanPage() {
 
   const handleSaveEdit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let proofUrl = editingDetail.proof_url;
+    try {
+      let proofUrl = editingDetail.proof_url;
 
-    if (editFileProof) {
-      proofUrl = await uploadProofFile(editFileProof);
+      if (editFileProof) {
+        const uploadedUrl = await uploadProofFile(editFileProof);
+        if (uploadedUrl) {
+          proofUrl = uploadedUrl;
+        }
+      }
+
+      const { error } = await supabase
+        .from('asset_details')
+        .update({
+          item_name: editItemName,
+          amount: parseRawNumber(editAmount),
+          payment_method: editPaymentMethod,
+          proof_url: proofUrl,
+        })
+        .eq('id', editingDetail.id);
+
+      if (error) {
+        console.error(error);
+        alert(`Gagal menyimpan perubahan: ${error.message}`);
+        return;
+      }
+
+      setEditingDetail(null);
+      setEditFileProof(null);
+      fetchAssetDetails(selectedAsset.id);
+    } catch (err: any) {
+      console.error(err);
+      alert('Terjadi kesalahan sistem saat menyimpan perubahan.');
     }
-
-    await supabase
-      .from('asset_details')
-      .update({
-        item_name: editItemName,
-        amount: parseRawNumber(editAmount),
-        payment_method: editPaymentMethod,
-        proof_url: proofUrl,
-      })
-      .eq('id', editingDetail.id);
-
-    setEditingDetail(null);
-    setEditFileProof(null);
-    fetchAssetDetails(selectedAsset.id);
   };
 
   const totalAccumulatedExpense = assetDetails.reduce((acc, curr) => acc + Number(curr.amount), 0);
