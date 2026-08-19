@@ -75,6 +75,9 @@ function LoginForm() {
             placeholder="nama@email.com"
             className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
           />
+          <p className="mt-1.5 text-[10px] font-medium text-zinc-500">
+            * Masukan email yang kamu pakai untuk Registrasi tadi ya!
+          </p>
         </div>
 
         <div>
@@ -99,6 +102,9 @@ function LoginForm() {
               {showPassword ? 'HIDE' : 'SHOW'}
             </button>
           </div>
+          <p className="mt-1.5 text-[10px] font-medium text-zinc-500">
+            * Masukan password yang kamu pakai untuk Registrasi tadi ya!
+          </p>
         </div>
 
         <button
@@ -111,9 +117,9 @@ function LoginForm() {
       </form>
 
       <p className="mt-8 text-center text-xs font-medium text-zinc-400">
-        Belum punya akun?{' '}
+        BELUM PUNYA AKUN?{' '}
         <Link href="/register" className="font-bold text-zinc-200 hover:text-white hover:underline">
-          Daftar sekarang
+          DAFTAR DISINI YA
         </Link>
       </p>
     </div>

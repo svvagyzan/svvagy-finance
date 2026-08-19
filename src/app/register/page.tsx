@@ -95,6 +95,9 @@ export default function RegisterPage() {
               placeholder="nama@email.com"
               className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
             />
+            <p className="mt-1.5 text-[10px] font-medium text-zinc-500">
+              * Masukin email kamu dengan Valid ya!
+            </p>
           </div>
 
           <div>
@@ -120,6 +123,9 @@ export default function RegisterPage() {
                 {showPassword ? 'HIDE' : 'SHOW'}
               </button>
             </div>
+            <p className="mt-1.5 text-[10px] font-medium text-zinc-500">
+              * Password kamu harus terdiri dari 6 Karakter ya!
+            </p>
           </div>
 
           <button
@@ -132,9 +138,9 @@ export default function RegisterPage() {
         </form>
 
         <p className="mt-8 text-center text-xs font-medium text-zinc-400">
-          Sudah punya akun?{' '}
+          SUDAH PUNYA AKUN?{' '}
           <Link href="/login" className="font-bold text-zinc-200 hover:text-white hover:underline">
-            Masuk disini
+            LOGIN DISINI YA
           </Link>
         </p>
       </div>
