@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { createClient } from '../utils/supabase/client';
 import { formatRupiah, parseRawNumber } from '../utils/format';
 import EmojiBackground from '../components/EmojiBackground';
-import { PlusCircle, History, BookOpen, LogOut } from 'lucide-react';
+import { History, BookOpen, LogOut } from 'lucide-react';
 
 export default function DashboardPage() {
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
   const [wallets, setWallets] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState<'pemasukan' | 'pengeluaran'>('pemasukan');
 
   const [incomeDesc, setIncomeDesc] = useState('');
   const [incomeAmount, setIncomeAmount] = useState('');
@@ -175,159 +176,181 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <form onSubmit={handleSaveIncome} className="space-y-4 border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur-md">
-            <h2 className="border-b border-zinc-800 pb-3 text-xs font-black uppercase tracking-widest text-emerald-400">
-              FORM PEMASUKAN
-            </h2>
-            
-            <div>
-              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
-                KETERANGAN
-              </label>
-              <input
-                type="text"
-                required
-                value={incomeDesc}
-                onChange={(e) => setIncomeDesc(e.target.value)}
-                placeholder="Gaji / Project / Hadiah"
-                className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
-                NOMINAL
-              </label>
-              <input
-                type="text"
-                required
-                value={incomeAmount}
-                onChange={(e) => setIncomeAmount(formatRupiah(e.target.value))}
-                placeholder="0"
-                className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
-                SUMBER UANG MU (Dari Mana)
-              </label>
-              <input
-                type="text"
-                required
-                value={incomeSource}
-                onChange={(e) => setIncomeSource(e.target.value)}
-                placeholder="Klien / Perusahaan / Transfer"
-                className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
-                MAU DISIMPAN KE
-              </label>
-              <select
-                required
-                value={incomeTarget}
-                onChange={(e) => setIncomeTarget(e.target.value)}
-                className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white outline-none transition focus:border-zinc-500"
+        <div className="border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur-md shadow-xl space-y-6">
+          <div className="flex flex-col gap-3 border-b border-zinc-800 pb-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveTab('pemasukan')}
+                className={`px-4 py-2 text-xs font-black uppercase tracking-widest transition border ${
+                  activeTab === 'pemasukan'
+                    ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
+                    : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-white'
+                }`}
               >
-                <option value="">-- Pilih Akun / Dompet --</option>
-                {wallets.map((w) => (
-                  <option key={w.id} value={w.name}>{w.name}</option>
-                ))}
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full border border-emerald-600/50 bg-emerald-600 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-emerald-500"
-            >
-              Simpan Pemasukan
-            </button>
-          </form>
-
-          <form onSubmit={handleSaveExpense} className="space-y-4 border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur-md">
-            <h2 className="border-b border-zinc-800 pb-3 text-xs font-black uppercase tracking-widest text-red-400">
-              FORM PENGELUARAN
-            </h2>
-
-            <div>
-              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
-                KETERANGAN
-              </label>
-              <input
-                type="text"
-                required
-                value={expenseDesc}
-                onChange={(e) => setExpenseDesc(e.target.value)}
-                placeholder="Beli Makan / Token Listrik"
-                className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
-                NOMINAL
-              </label>
-              <input
-                type="text"
-                required
-                value={expenseAmount}
-                onChange={(e) => setExpenseAmount(formatRupiah(e.target.value))}
-                placeholder="0"
-                className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
-                BAYAR PAKAI APA (Sumber Uang/Dana)
-              </label>
-              <select
-                required
-                value={expenseSource}
-                onChange={(e) => setExpenseSource(e.target.value)}
-                className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white outline-none transition focus:border-zinc-500"
+                FORM PEMASUKAN
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('pengeluaran')}
+                className={`px-4 py-2 text-xs font-black uppercase tracking-widest transition border ${
+                  activeTab === 'pengeluaran'
+                    ? 'border-red-500 bg-red-500/10 text-red-400'
+                    : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-white'
+                }`}
               >
-                <option value="">-- Pilih Akun / Dompet --</option>
-                {wallets.map((w) => (
-                  <option key={w.id} value={w.name}>{w.name}</option>
-                ))}
-              </select>
+                FORM PENGELUARAN
+              </button>
             </div>
-
-            <div>
-              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
-                KATEGORI PENGELUARAN
-              </label>
-              <input
-                type="text"
-                required
-                value={expenseCategory}
-                onChange={(e) => setExpenseCategory(e.target.value)}
-                placeholder="Makanan / Transportasi / Hiburan"
-                className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
-              />
-            </div>
-
             <button
-              type="submit"
-              className="w-full border border-red-600/50 bg-red-600 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-red-500"
+              type="button"
+              onClick={() => setShowWalletModal(true)}
+              className="self-start sm:self-auto text-[10px] font-extrabold uppercase tracking-widest text-zinc-400 hover:text-white transition underline underline-offset-4"
             >
-              Simpan Pengeluaran
+              + TAMBAH AKUN/DOMPET KUSTOM
             </button>
-          </form>
+          </div>
+
+          {activeTab === 'pemasukan' ? (
+            <form onSubmit={handleSaveIncome} className="space-y-4">
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
+                  KETERANGAN
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={incomeDesc}
+                  onChange={(e) => setIncomeDesc(e.target.value)}
+                  placeholder="Gaji / Project / Hadiah"
+                  className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
+                  NOMINAL
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={incomeAmount}
+                  onChange={(e) => setIncomeAmount(formatRupiah(e.target.value))}
+                  placeholder="0"
+                  className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
+                  SUMBER UANG MU (Dari Mana)
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={incomeSource}
+                  onChange={(e) => setIncomeSource(e.target.value)}
+                  placeholder="Klien / Perusahaan / Transfer"
+                  className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
+                  MAU DISIMPAN KE
+                </label>
+                <select
+                  required
+                  value={incomeTarget}
+                  onChange={(e) => setIncomeTarget(e.target.value)}
+                  className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white outline-none transition focus:border-zinc-500"
+                >
+                  <option value="">-- Pilih Akun / Dompet --</option>
+                  {wallets.map((w) => (
+                    <option key={w.id} value={w.name}>{w.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full border border-zinc-700 bg-zinc-950 py-3.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
+              >
+                SIMPAN PEMASUKAN
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleSaveExpense} className="space-y-4">
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
+                  KETERANGAN
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={expenseDesc}
+                  onChange={(e) => setExpenseDesc(e.target.value)}
+                  placeholder="Beli Makan / Token Listrik"
+                  className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
+                  NOMINAL
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={expenseAmount}
+                  onChange={(e) => setExpenseAmount(formatRupiah(e.target.value))}
+                  placeholder="0"
+                  className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
+                  BAYAR PAKAI APA (Sumber Uang/Dana)
+                </label>
+                <select
+                  required
+                  value={expenseSource}
+                  onChange={(e) => setExpenseSource(e.target.value)}
+                  className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white outline-none transition focus:border-zinc-500"
+                >
+                  <option value="">-- Pilih Akun / Dompet --</option>
+                  {wallets.map((w) => (
+                    <option key={w.id} value={w.name}>{w.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
+                  KATEGORI PENGELUARAN
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={expenseCategory}
+                  onChange={(e) => setExpenseCategory(e.target.value)}
+                  placeholder="Makanan / Transportasi / Hiburan"
+                  className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full border border-zinc-700 bg-zinc-950 py-3.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
+              >
+                SIMPAN PENGELUARAN
+              </button>
+            </form>
+          )}
         </div>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <button
-            onClick={() => setShowWalletModal(true)}
-            className="flex items-center gap-2 border border-emerald-600/50 bg-emerald-600 px-4 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-emerald-500"
-          >
-            <PlusCircle size={15} /> + TAMBAH AKUN/DOMPET KUSTOM
-          </button>
           <Link
             href="/riwayat"
             className="flex items-center gap-2 border border-zinc-700 bg-zinc-800 px-4 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-zinc-700"
