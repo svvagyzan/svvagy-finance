@@ -19,24 +19,39 @@ export default function RegisterPage() {
     setLoading(true);
     setMessage(null);
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      setMessage({ type: 'error', text: error.message });
-    } else {
-      setMessage({
-        type: 'success',
-        text: 'Pendaftaran berhasil! Silakan periksa inbox email kamu untuk verifikasi akun sebelum login.',
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
-      setEmail('');
-      setPassword('');
+
+      if (error) {
+        if (error.status === 504 || error.message.includes('504')) {
+          setMessage({
+            type: 'error',
+            text: 'Gagal mengirim email verifikasi (SMTP Timeout). Silakan periksa Port/App Password Gmail di Supabase.',
+          });
+        } else {
+          setMessage({ type: 'error', text: error.message });
+        }
+      } else {
+        setMessage({
+          type: 'success',
+          text: 'Pendaftaran berhasil! Silakan periksa inbox email kamu untuk verifikasi akun sebelum login.',
+        });
+        setEmail('');
+        setPassword('');
+      }
+    } catch (err: any) {
+      setMessage({
+        type: 'error',
+        text: 'Terjadi kesalahan server saat memproses pendaftaran.',
+      });
     }
+
     setLoading(false);
   };
 
