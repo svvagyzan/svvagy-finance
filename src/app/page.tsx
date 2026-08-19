@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { createClient } from '../utils/supabase/client';
 import { formatRupiah, parseRawNumber } from '../utils/format';
 import EmojiBackground from '../components/EmojiBackground';
-import { PlusCircle, History, BookOpen, LogOut, Wallet } from 'lucide-react';
+import { PlusCircle, History, BookOpen, LogOut } from 'lucide-react';
 
 export default function DashboardPage() {
   const supabase = createClient();
@@ -128,7 +127,11 @@ export default function DashboardPage() {
   };
 
   if (loading) {
-    return <div className="flex h-screen items-center justify-center bg-zinc-950 text-white">Loading...</div>;
+    return (
+      <main className="relative min-h-screen bg-zinc-950">
+        <EmojiBackground />
+      </main>
+    );
   }
 
   return (
@@ -136,7 +139,6 @@ export default function DashboardPage() {
       <EmojiBackground />
 
       <div className="mx-auto max-w-4xl space-y-6">
-
         <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
           <div>
             <h1 className="text-2xl font-extrabold text-white md:text-3xl">Svvagy Finance</h1>
@@ -187,7 +189,6 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {/* Form Pemasukan */}
           <form onSubmit={handleSaveIncome} className="space-y-4 rounded-xl border border-zinc-800 bg-zinc-900/90 p-5 backdrop-blur-sm">
             <h2 className="border-b border-zinc-800 pb-2 text-base font-bold text-emerald-400">FORM PEMASUKAN</h2>
             
