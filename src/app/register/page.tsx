@@ -43,27 +43,31 @@ export default function RegisterPage() {
     <main className="relative flex min-h-screen flex-col items-center justify-center p-4">
       <EmojiBackground />
 
-      <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900/90 p-8 shadow-2xl backdrop-blur-md">
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl font-extrabold tracking-tight text-white">Svvagy Finance</h1>
-          <p className="mt-2 text-sm text-zinc-400">Manage Keuanganmu Dengan Sangat Mudah!</p>
-        </div>
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-black tracking-widest text-white uppercase sm:text-4xl">
+          Svvagy Finance
+        </h1>
+        <p className="mt-2 text-xs font-bold tracking-widest text-zinc-400 uppercase">
+          Manage Keuanganmu Dengan Sangat Mudah!
+        </p>
+      </div>
 
+      <div className="w-full max-w-md border border-zinc-800 bg-zinc-900/90 p-8 shadow-2xl backdrop-blur-md">
         {message && (
           <div
-            className={`mb-4 rounded-lg p-3 text-sm font-medium ${
+            className={`mb-6 border p-3.5 text-xs font-bold uppercase tracking-wider text-center ${
               message.type === 'error'
-                ? 'border border-red-500/50 bg-red-500/10 text-red-400'
-                : 'border border-emerald-500/50 bg-emerald-500/10 text-emerald-400'
+                ? 'border-red-500/30 bg-red-500/10 text-red-400'
+                : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
             }`}
           >
             {message.text}
           </div>
         )}
 
-        <form onSubmit={handleRegister} className="space-y-4">
+        <form onSubmit={handleRegister} className="space-y-6">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
               Email
             </label>
             <input
@@ -72,12 +76,12 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nama@email.com"
-              className="mt-1 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:border-emerald-500 focus:outline-none"
+              className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-emerald-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">
               Password
             </label>
             <input
@@ -87,22 +91,22 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="mt-1 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:border-emerald-500 focus:outline-none"
+              className="mt-2 w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-emerald-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-emerald-600 py-3 text-sm font-bold text-white transition hover:bg-emerald-500 disabled:opacity-50"
+            className="w-full bg-emerald-600 py-3.5 text-xs font-black uppercase tracking-widest text-white transition hover:bg-emerald-500 active:scale-[0.99] disabled:opacity-50"
           >
             {loading ? 'Memproses...' : 'Daftar Akun'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-zinc-400">
+        <p className="mt-8 text-center text-xs font-medium text-zinc-400">
           Sudah punya akun?{' '}
-          <Link href="/login" className="font-semibold text-emerald-400 hover:underline">
+          <Link href="/login" className="font-bold text-emerald-400 hover:text-emerald-300 hover:underline">
             Masuk disini
           </Link>
         </p>
