@@ -177,7 +177,7 @@ export default function DashboardPage() {
                     : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-white'
                 }`}
               >
-                FORM PEMASUKAN
+                + CATATAN PEMASUKAN
               </button>
               <button
                 type="button"
@@ -188,7 +188,7 @@ export default function DashboardPage() {
                     : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-white'
                 }`}
               >
-                FORM PENGELUARAN
+                + CATATAN PENGELUARAN
               </button>
             </div>
             <button
@@ -211,7 +211,7 @@ export default function DashboardPage() {
                   required
                   value={incomeDesc}
                   onChange={(e) => setIncomeDesc(e.target.value)}
-                  placeholder="Gaji / Project / Hadiah"
+                  placeholder="* Masukan Keterangan"
                   className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                 />
               </div>
@@ -225,7 +225,7 @@ export default function DashboardPage() {
                   required
                   value={incomeAmount}
                   onChange={(e) => setIncomeAmount(formatRupiah(e.target.value))}
-                  placeholder="0"
+                  placeholder="* Masukan Nominal"
                   className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                 />
               </div>
@@ -239,7 +239,7 @@ export default function DashboardPage() {
                   required
                   value={incomeSource}
                   onChange={(e) => setIncomeSource(e.target.value)}
-                  placeholder="Klien / Perusahaan / Transfer"
+                  placeholder="* Input Sumber Uang"
                   className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                 />
               </div>
@@ -279,7 +279,7 @@ export default function DashboardPage() {
                   required
                   value={expenseDesc}
                   onChange={(e) => setExpenseDesc(e.target.value)}
-                  placeholder="Beli Makan / Token Listrik"
+                  placeholder="* Masukan Keterangan"
                   className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                 />
               </div>
@@ -293,7 +293,7 @@ export default function DashboardPage() {
                   required
                   value={expenseAmount}
                   onChange={(e) => setExpenseAmount(formatRupiah(e.target.value))}
-                  placeholder="0"
+                  placeholder="* Masukan Nominal"
                   className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                 />
               </div>
@@ -324,7 +324,7 @@ export default function DashboardPage() {
                   required
                   value={expenseCategory}
                   onChange={(e) => setExpenseCategory(e.target.value)}
-                  placeholder="Makanan / Transportasi / Hiburan"
+                  placeholder="* Input Nama Pengeluaran"
                   className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                 />
               </div>
@@ -369,7 +369,7 @@ export default function DashboardPage() {
                   required
                   value={walletName}
                   onChange={(e) => setWalletName(e.target.value)}
-                  placeholder="BCA / GoPay / Cash"
+                  placeholder="* Masukan Nama Dompet, Cth: Gopay/Bank BCA/Cash"
                   className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                 />
               </div>
