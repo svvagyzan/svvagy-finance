@@ -339,18 +339,18 @@ export default function DashboardPage() {
           )}
         </div>
 
-        <div className="flex flex-wrap gap-3 pt-2">
+        <div className="flex flex-wrap justify-center gap-3 pt-2">
           <Link
             href="/riwayat"
-            className="flex items-center gap-2 border border-zinc-700 bg-zinc-800 px-4 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-zinc-700"
+            className="border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99] flex items-center gap-2"
           >
-            <History size={15} /> LIHAT SEMUA RIWAYAT TRANSAKSI
+            <History size={14} /> LIHAT SEMUA RIWAYAT TRANSAKSI
           </Link>
           <Link
             href="/pembukuan"
-            className="flex items-center gap-2 border border-blue-600/50 bg-blue-600 px-4 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-blue-500"
+            className="border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99] flex items-center gap-2"
           >
-            <BookOpen size={15} /> PERLU PEMBUKUAN ? KLIK DISINI YA
+            <BookOpen size={14} /> PERLU PEMBUKUAN ? KLIK DISINI YA
           </Link>
         </div>
       </div>
