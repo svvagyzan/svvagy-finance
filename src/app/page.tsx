@@ -404,15 +404,15 @@ export default function DashboardPage() {
                 <button
                   type="button"
                   onClick={() => setShowWalletModal(false)}
-                  className="border border-zinc-800 bg-zinc-800 px-4 py-2 text-xs font-black uppercase tracking-widest text-zinc-300 hover:bg-zinc-700"
+                  className="border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
                 >
-                  Batal
+                  BATAL
                 </button>
                 <button
                   type="submit"
-                  className="border border-emerald-600/50 bg-emerald-600 px-4 py-2 text-xs font-black uppercase tracking-widest text-white hover:bg-emerald-500"
+                  className="border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
                 >
-                  Simpan
+                  SIMPAN
                 </button>
               </div>
             </form>
