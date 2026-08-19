@@ -21,16 +21,14 @@ export async function GET(request: Request) {
               cookiesToSet.forEach(({ name, value, options }) =>
                 cookieStore.set(name, value, options)
               );
-            } catch {
-              // Diabaikan jika dipanggil dari Server Component
-            }
+            } catch {}
           },
         },
       }
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}/`);
+      return NextResponse.redirect(`${origin}/login?verified=true`);
     }
   }
 
