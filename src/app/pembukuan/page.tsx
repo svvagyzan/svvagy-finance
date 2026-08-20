@@ -32,6 +32,17 @@ export default function PembukuanPage() {
 
   useEffect(() => {
     fetchAssets();
+    const savedMethods = localStorage.getItem('custom_payment_methods');
+    if (savedMethods) {
+      try {
+        const parsed = JSON.parse(savedMethods);
+        if (Array.isArray(parsed)) {
+          setCustomPaymentMethods(parsed);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }, []);
 
   const fetchAssets = async () => {
@@ -67,7 +78,7 @@ export default function PembukuanPage() {
   };
 
   const handleDeleteAsset = async (assetId: string) => {
-    if (!confirm('Yakin ingin menghapus aset ini beserta seluruh rinciannya?')) return;
+    if (!confirm('Kamu yakin ingin menghapus aset ini beserta seluruh rinciannya?')) return;
     await supabase.from('assets').delete().eq('id', assetId);
     setSelectedAsset(null);
     fetchAssets();
@@ -192,6 +203,17 @@ export default function PembukuanPage() {
     }
   };
 
+  const handleAddPaymentMethod = () => {
+    if (newMethodName.trim()) {
+      const updatedMethods = [...customPaymentMethods, newMethodName.trim()];
+      setCustomPaymentMethods(updatedMethods);
+      localStorage.setItem('custom_payment_methods', JSON.stringify(updatedMethods));
+      setPaymentMethod(newMethodName.trim());
+      setNewMethodName('');
+      setShowAddMethodModal(false);
+    }
+  };
+
   const totalAccumulatedExpense = assetDetails.reduce((acc, curr) => acc + Number(curr.amount), 0);
 
   return (
@@ -205,7 +227,7 @@ export default function PembukuanPage() {
               Pembukuan
             </h1>
             <p className="mt-1 text-xs font-extrabold tracking-widest text-zinc-400 uppercase sm:text-sm">
-              BREAKDOWN PENGELUARANMU
+              BREAKDOWN PENGELUARANMU DENGAN BUKTI TRANSFER!
             </p>
           </div>
           <Link
@@ -222,7 +244,7 @@ export default function PembukuanPage() {
             required
             value={newAssetName}
             onChange={(e) => setNewAssetName(e.target.value)}
-            placeholder="Masukkan Nama Aset Baru (misal: Laptop Kerja, Rumah A)..."
+            placeholder="* Masukkan Nama Aset Baru Kamu(misal: Laptop Kerja, Motor A, DLL)..."
             className="w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
           />
           <button
@@ -239,7 +261,7 @@ export default function PembukuanPage() {
           </div>
         ) : assets.length === 0 ? (
           <div className="border border-zinc-800 bg-zinc-900/90 p-8 text-center text-xs font-black uppercase tracking-widest text-zinc-400">
-            BELUM ADA ASET, SILAHKAN BUAT ASET PERTAMA KAMU
+            BELUM ADA ASET, SILAHKAN BUAT ASET PERTAMA KAMU YA!
           </div>
         ) : (
           <div className="flex flex-wrap gap-2">
@@ -265,7 +287,7 @@ export default function PembukuanPage() {
               <div>
                 <h2 className="text-xl font-black uppercase tracking-widest text-white">{selectedAsset.name}</h2>
                 <p className="mt-1 text-xs font-extrabold uppercase tracking-widest text-zinc-400">
-                  TOTAL AKUMULASI PENGELUARAN:{' '}
+                  TOTAL AKUMULASI PENGELUARAN KAMU:{' '}
                   <span className="font-black text-red-400">Rp {formatRupiah(totalAccumulatedExpense.toString())}</span>
                 </p>
               </div>
@@ -287,7 +309,7 @@ export default function PembukuanPage() {
                     required
                     value={itemName}
                     onChange={(e) => setItemName(e.target.value)}
-                    placeholder="Servis / Sparepart"
+                    placeholder="* Service, DLL"
                     className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                   />
                 </div>
@@ -299,7 +321,7 @@ export default function PembukuanPage() {
                     required
                     value={amount}
                     onChange={(e) => setAmount(formatRupiah(e.target.value))}
-                    placeholder="0"
+                    placeholder="* Masukan nominal angka"
                     className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                   />
                 </div>
@@ -412,7 +434,7 @@ export default function PembukuanPage() {
                 type="text"
                 value={newMethodName}
                 onChange={(e) => setNewMethodName(e.target.value)}
-                placeholder="misal: QRIS, Bank Mandiri..."
+                placeholder="* misal: QRIS, Bank Mandiri..."
                 className="mt-3 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
               />
               <div className="mt-4 flex justify-end gap-2">
@@ -425,14 +447,7 @@ export default function PembukuanPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    if (newMethodName.trim()) {
-                      setCustomPaymentMethods([...customPaymentMethods, newMethodName.trim()]);
-                      setPaymentMethod(newMethodName.trim());
-                      setNewMethodName('');
-                      setShowAddMethodModal(false);
-                    }
-                  }}
+                  onClick={handleAddPaymentMethod}
                   className="border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
                 >
                   SIMPAN METODE
