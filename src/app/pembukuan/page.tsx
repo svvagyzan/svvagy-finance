@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { createClient } from '../../utils/supabase/client';
 import { formatRupiah, parseRawNumber } from '../../utils/format';
 import EmojiBackground from '../../components/EmojiBackground';
-import { ArrowLeft, Plus, Trash2, Edit2, Upload, X } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Edit2 } from 'lucide-react';
 
 export default function PembukuanPage() {
   const supabase = createClient();
@@ -195,45 +195,50 @@ export default function PembukuanPage() {
   const totalAccumulatedExpense = assetDetails.reduce((acc, curr) => acc + Number(curr.amount), 0);
 
   return (
-    <main className="relative min-h-screen p-4 md:p-8">
+    <main className="relative min-h-screen p-4 pb-20 md:p-8">
       <EmojiBackground />
 
-      <div className="mx-auto max-w-5xl space-y-6">
-
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+      <div className="mx-auto max-w-4xl space-y-6">
+        <div className="flex flex-col gap-4 border-b border-zinc-800 pb-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-extrabold text-white">Pembukuan</h1>
-            <p className="text-xs text-zinc-400 uppercase">BREAKDOWN PENGELUARANMU</p>
+            <h1 className="text-3xl font-black tracking-widest text-white uppercase sm:text-4xl">
+              Pembukuan
+            </h1>
+            <p className="mt-1 text-xs font-extrabold tracking-widest text-zinc-400 uppercase sm:text-sm">
+              BREAKDOWN PENGELUARANMU
+            </p>
           </div>
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs font-bold text-zinc-300 hover:bg-zinc-800"
+            className="self-start sm:self-auto border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99] flex items-center gap-2"
           >
-            <ArrowLeft size={16} /> BACK
+            <ArrowLeft size={14} /> BACK
           </Link>
         </div>
 
-        <form onSubmit={handleAddAsset} className="flex gap-2 rounded-xl border border-zinc-800 bg-zinc-900/80 p-4 backdrop-blur-sm">
+        <form onSubmit={handleAddAsset} className="flex gap-2 border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur-md shadow-xl">
           <input
             type="text"
             required
             value={newAssetName}
             onChange={(e) => setNewAssetName(e.target.value)}
             placeholder="Masukkan Nama Aset Baru (misal: Laptop Kerja, Rumah A)..."
-            className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white"
+            className="w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
           />
           <button
             type="submit"
-            className="whitespace-nowrap rounded-lg bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-500 flex items-center gap-1"
+            className="whitespace-nowrap border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99] flex items-center gap-1"
           >
-            <Plus size={16} /> TAMBAH ASET
+            <Plus size={14} /> TAMBAH ASET
           </button>
         </form>
 
         {loading ? (
-          <p className="text-center text-xs text-zinc-500">Memuat aset...</p>
+          <div className="border border-zinc-800 bg-zinc-900/90 p-6 text-center text-xs font-extrabold uppercase tracking-widest text-zinc-500">
+            Memuat aset...
+          </div>
         ) : assets.length === 0 ? (
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8 text-center text-xs font-bold text-zinc-400">
+          <div className="border border-zinc-800 bg-zinc-900/90 p-8 text-center text-xs font-black uppercase tracking-widest text-zinc-400">
             BELUM ADA ASET, SILAHKAN BUAT ASET PERTAMA KAMU
           </div>
         ) : (
@@ -242,10 +247,10 @@ export default function PembukuanPage() {
               <button
                 key={asset.id}
                 onClick={() => handleSelectAsset(asset)}
-                className={`rounded-lg px-4 py-2 text-xs font-bold transition ${
+                className={`px-4 py-2.5 text-xs font-black uppercase tracking-widest transition border ${
                   selectedAsset?.id === asset.id
-                    ? 'bg-blue-600 text-white'
-                    : 'border border-zinc-800 bg-zinc-900 text-zinc-400 hover:bg-zinc-800'
+                    ? 'border-zinc-500 bg-zinc-950 text-white'
+                    : 'border-zinc-800 bg-zinc-900/90 text-zinc-400 hover:text-white'
                 }`}
               >
                 {asset.name}
@@ -255,58 +260,58 @@ export default function PembukuanPage() {
         )}
 
         {selectedAsset && (
-          <div className="space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur-md">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+          <div className="border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur-md shadow-xl space-y-6">
+            <div className="flex flex-col gap-3 border-b border-zinc-800 pb-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-xl font-bold text-white">{selectedAsset.name}</h2>
-                <p className="mt-1 text-xs text-zinc-400">
+                <h2 className="text-xl font-black uppercase tracking-widest text-white">{selectedAsset.name}</h2>
+                <p className="mt-1 text-xs font-extrabold uppercase tracking-widest text-zinc-400">
                   TOTAL AKUMULASI PENGELUARAN:{' '}
-                  <span className="font-bold text-red-400">Rp {formatRupiah(totalAccumulatedExpense.toString())}</span>
+                  <span className="font-black text-red-400">Rp {formatRupiah(totalAccumulatedExpense.toString())}</span>
                 </p>
               </div>
               <button
                 onClick={() => handleDeleteAsset(selectedAsset.id)}
-                className="flex items-center gap-1 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-bold text-red-400 hover:bg-red-500/20"
+                className="self-start sm:self-auto border border-red-900/50 bg-zinc-950 px-4 py-2 text-xs font-black uppercase tracking-widest text-red-400 transition hover:border-red-500 hover:bg-black active:scale-[0.99] flex items-center gap-1"
               >
                 <Trash2 size={14} /> HAPUS ASET
               </button>
             </div>
 
             <form onSubmit={handleSaveDetail} className="space-y-4">
-              <h3 className="text-xs font-bold uppercase text-zinc-300">Tambah Rincian Pengeluaran Aset</h3>
+              <h3 className="text-xs font-black uppercase tracking-widest text-zinc-300">Tambah Rincian Pengeluaran Aset</h3>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
                 <div>
-                  <label className="block text-[10px] text-zinc-400">NAMA ITEM</label>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">NAMA ITEM</label>
                   <input
                     type="text"
                     required
                     value={itemName}
                     onChange={(e) => setItemName(e.target.value)}
                     placeholder="Servis / Sparepart"
-                    className="mt-1 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white"
+                    className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] text-zinc-400">NOMINAL</label>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">NOMINAL</label>
                   <input
                     type="text"
                     required
                     value={amount}
                     onChange={(e) => setAmount(formatRupiah(e.target.value))}
                     placeholder="0"
-                    className="mt-1 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white"
+                    className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] text-zinc-400">METODE PEMBAYARAN</label>
-                  <div className="mt-1 flex gap-1">
+                  <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">METODE PEMBAYARAN</label>
+                  <div className="mt-1.5 flex gap-1">
                     <select
                       required
                       value={paymentMethod}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white"
+                      className="w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white outline-none transition focus:border-zinc-500"
                     >
                       <option value="">-- Pilih --</option>
                       {customPaymentMethods.map((method, idx) => (
@@ -316,7 +321,7 @@ export default function PembukuanPage() {
                     <button
                       type="button"
                       onClick={() => setShowAddMethodModal(true)}
-                      className="rounded-lg bg-zinc-800 px-2.5 text-xs text-zinc-300 hover:bg-zinc-700"
+                      className="border border-zinc-700 bg-zinc-950 px-3 text-xs font-black text-white hover:border-zinc-500"
                     >
                       +
                     </button>
@@ -324,19 +329,19 @@ export default function PembukuanPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] text-zinc-400">BUKTI TRANSFER (FOTO/MEDIA)</label>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">BUKTI TRANSFER (FOTO/MEDIA)</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => setFileProof(e.target.files?.[0] || null)}
-                    className="mt-1 w-full text-xs text-zinc-400 file:mr-2 file:rounded-md file:border-0 file:bg-zinc-800 file:px-2 file:py-1 file:text-xs file:text-zinc-300"
+                    className="mt-1.5 w-full text-xs text-zinc-400 file:mr-2 file:border file:border-zinc-700 file:bg-zinc-950 file:px-2.5 file:py-1 file:text-xs file:font-bold file:uppercase file:text-white"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full rounded-lg bg-emerald-600 py-2.5 text-xs font-bold text-white hover:bg-emerald-500"
+                className="w-full border border-zinc-700 bg-zinc-950 py-3.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
               >
                 SIMPAN RINCIAN
               </button>
@@ -344,7 +349,7 @@ export default function PembukuanPage() {
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs text-zinc-300">
-                <thead className="border-b border-zinc-800 bg-zinc-950/50 text-[10px] uppercase text-zinc-400">
+                <thead className="border-b border-zinc-800 bg-zinc-950/50 text-[10px] font-extrabold uppercase tracking-widest text-zinc-400">
                   <tr>
                     <th className="p-3">Nama Rincian</th>
                     <th className="p-3">Waktu Penambahan</th>
@@ -357,17 +362,17 @@ export default function PembukuanPage() {
                 <tbody className="divide-y divide-zinc-800/50">
                   {assetDetails.map((detail) => (
                     <tr key={detail.id} className="hover:bg-zinc-800/30">
-                      <td className="p-3 font-semibold text-white">{detail.item_name}</td>
-                      <td className="p-3 text-zinc-400">{new Date(detail.created_at).toLocaleString('id-ID')}</td>
-                      <td className="p-3 font-bold text-red-400">Rp {formatRupiah(detail.amount)}</td>
-                      <td className="p-3">{detail.payment_method}</td>
+                      <td className="p-3 font-black uppercase tracking-wider text-white">{detail.item_name}</td>
+                      <td className="p-3 text-zinc-400 uppercase">{new Date(detail.created_at).toLocaleString('id-ID')}</td>
+                      <td className="p-3 font-black text-red-400">Rp {formatRupiah(detail.amount)}</td>
+                      <td className="p-3 uppercase font-semibold">{detail.payment_method}</td>
                       <td className="p-3">
                         {detail.proof_url ? (
                           <a
                             href={detail.proof_url}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-blue-400 underline hover:text-blue-300"
+                            className="font-bold text-blue-400 underline uppercase hover:text-blue-300"
                           >
                             Lihat Bukti
                           </a>
@@ -379,13 +384,13 @@ export default function PembukuanPage() {
                         <div className="flex justify-end gap-2">
                           <button
                             onClick={() => handleStartEdit(detail)}
-                            className="rounded p-1 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                            className="p-1 text-zinc-400 hover:text-white"
                           >
                             <Edit2 size={14} />
                           </button>
                           <button
                             onClick={() => handleDeleteDetail(detail.id)}
-                            className="rounded p-1 text-red-400 hover:bg-zinc-800 hover:text-red-300"
+                            className="p-1 text-red-400 hover:text-red-300"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -401,20 +406,20 @@ export default function PembukuanPage() {
 
         {showAddMethodModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-sm rounded-xl border border-zinc-800 bg-zinc-900 p-5">
-              <h4 className="text-sm font-bold text-white">Tambah Metode Pembayaran</h4>
+            <div className="w-full max-w-md border border-zinc-800 bg-zinc-900 p-6 shadow-2xl">
+              <h4 className="text-sm font-black uppercase tracking-widest text-white">Tambah Metode Pembayaran</h4>
               <input
                 type="text"
                 value={newMethodName}
                 onChange={(e) => setNewMethodName(e.target.value)}
                 placeholder="misal: QRIS, Bank Mandiri..."
-                className="mt-3 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white"
+                className="mt-3 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
               />
               <div className="mt-4 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowAddMethodModal(false)}
-                  className="rounded-lg bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-300"
+                  className="border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
                 >
                   BATAL
                 </button>
@@ -428,7 +433,7 @@ export default function PembukuanPage() {
                       setShowAddMethodModal(false);
                     }
                   }}
-                  className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white"
+                  className="border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
                 >
                   SIMPAN METODE
                 </button>
@@ -439,49 +444,49 @@ export default function PembukuanPage() {
 
         {editingDetail && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-              <h3 className="text-base font-bold text-white">Form Edit Rincian Pengeluaran</h3>
-              <form onSubmit={handleSaveEdit} className="mt-4 space-y-3">
+            <div className="w-full max-w-md border border-zinc-800 bg-zinc-900 p-6 shadow-2xl space-y-4">
+              <h3 className="text-sm font-black uppercase tracking-widest text-white">Form Edit Rincian Pengeluaran</h3>
+              <form onSubmit={handleSaveEdit} className="space-y-4">
                 <div>
-                  <label className="block text-[10px] text-zinc-400">NAMA PENGELUARAN</label>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">NAMA PENGELUARAN</label>
                   <input
                     type="text"
                     required
                     value={editItemName}
                     onChange={(e) => setEditItemName(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white"
+                    className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] text-zinc-400">NOMINAL</label>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">NOMINAL</label>
                   <input
                     type="text"
                     required
                     value={editAmount}
                     onChange={(e) => setEditAmount(formatRupiah(e.target.value))}
-                    className="mt-1 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white"
+                    className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] text-zinc-400">METODE PEMBAYARAN</label>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">METODE PEMBAYARAN</label>
                   <input
                     type="text"
                     required
                     value={editPaymentMethod}
                     onChange={(e) => setEditPaymentMethod(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white"
+                    className="mt-1.5 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] text-zinc-400">GANTI BUKTI (Opsional)</label>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">GANTI BUKTI (Opsional)</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => setEditFileProof(e.target.files?.[0] || null)}
-                    className="mt-1 w-full text-xs text-zinc-400 file:mr-2 file:rounded-md file:border-0 file:bg-zinc-800 file:px-2 file:py-1 file:text-xs file:text-zinc-300"
+                    className="mt-1.5 w-full text-xs text-zinc-400 file:mr-2 file:border file:border-zinc-700 file:bg-zinc-950 file:px-2.5 file:py-1 file:text-xs file:font-bold file:uppercase file:text-white"
                   />
                 </div>
 
@@ -489,13 +494,13 @@ export default function PembukuanPage() {
                   <button
                     type="button"
                     onClick={() => setEditingDetail(null)}
-                    className="rounded-lg bg-zinc-800 px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-zinc-700"
+                    className="border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
                   >
                     BATAL
                   </button>
                   <button
                     type="submit"
-                    className="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-500"
+                    className="border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99]"
                   >
                     SIMPAN PERUBAHAN
                   </button>
