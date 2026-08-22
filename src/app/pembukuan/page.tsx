@@ -78,7 +78,7 @@ export default function PembukuanPage() {
   };
 
   const handleDeleteAsset = async (assetId: string) => {
-    if (!confirm('Kamu yakin ingin menghapus aset ini beserta seluruh rinciannya?')) return;
+    if (!confirm('Yakin ingin menghapus aset ini beserta seluruh rinciannya?')) return;
     await supabase.from('assets').delete().eq('id', assetId);
     setSelectedAsset(null);
     fetchAssets();
@@ -238,18 +238,18 @@ export default function PembukuanPage() {
           </Link>
         </div>
 
-        <form onSubmit={handleAddAsset} className="flex gap-2 border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur-md shadow-xl">
+        <form onSubmit={handleAddAsset} className="flex gap-2 border border-zinc-800 bg-zinc-900/90 p-4 sm:p-6 backdrop-blur-md shadow-xl">
           <input
             type="text"
             required
             value={newAssetName}
             onChange={(e) => setNewAssetName(e.target.value)}
-            placeholder="* Masukkan Nama Aset Baru Kamu(misal: Laptop Kerja, Motor A, DLL)..."
-            className="w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
+            placeholder="* Masukkan Nama Aset Baru..."
+            className="w-full min-w-0 border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500 sm:px-3.5 sm:py-2.5"
           />
           <button
             type="submit"
-            className="whitespace-nowrap border border-zinc-700 bg-zinc-950 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99] flex items-center gap-1"
+            className="shrink-0 border border-zinc-700 bg-zinc-950 px-3 py-2 text-[11px] font-black uppercase tracking-wider text-white transition hover:border-zinc-500 hover:bg-black active:scale-[0.99] flex items-center gap-1 sm:px-5 sm:py-2.5 sm:text-xs sm:tracking-widest"
           >
             <Plus size={14} /> TAMBAH ASET
           </button>
@@ -261,7 +261,7 @@ export default function PembukuanPage() {
           </div>
         ) : assets.length === 0 ? (
           <div className="border border-zinc-800 bg-zinc-900/90 p-8 text-center text-xs font-black uppercase tracking-widest text-zinc-400">
-            BELUM ADA ASET, SILAHKAN BUAT ASET PERTAMA KAMU YA!
+            BELUM ADA ASET, SILAHKAN BUAT ASET PERTAMA KAMU
           </div>
         ) : (
           <div className="flex flex-wrap gap-2">
@@ -282,7 +282,7 @@ export default function PembukuanPage() {
         )}
 
         {selectedAsset && (
-          <div className="border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur-md shadow-xl space-y-6">
+          <div className="border border-zinc-800 bg-zinc-900/90 p-4 sm:p-6 backdrop-blur-md shadow-xl space-y-6">
             <div className="flex flex-col gap-3 border-b border-zinc-800 pb-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-xl font-black uppercase tracking-widest text-white">{selectedAsset.name}</h2>
@@ -300,7 +300,7 @@ export default function PembukuanPage() {
             </div>
 
             <form onSubmit={handleSaveDetail} className="space-y-4">
-              <h3 className="text-xs font-black uppercase tracking-widest text-zinc-300">Tambah Rincian Pengeluaran Aset</h3>
+              <h3 className="text-xs font-black uppercase tracking-widest text-zinc-300">TAMBAH RINCIAN PENGELUARAN ASET</h3>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
                 <div>
                   <label className="block text-[11px] font-extrabold uppercase tracking-widest text-zinc-400">NAMA ITEM</label>
@@ -369,7 +369,7 @@ export default function PembukuanPage() {
               </button>
             </form>
 
-            <div className="overflow-x-auto">
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left text-xs text-zinc-300">
                 <thead className="border-b border-zinc-800 bg-zinc-950/50 text-[10px] font-extrabold uppercase tracking-widest text-zinc-400">
                   <tr>
@@ -423,6 +423,48 @@ export default function PembukuanPage() {
                 </tbody>
               </table>
             </div>
+
+            <div className="space-y-3 md:hidden">
+              {assetDetails.map((detail) => (
+                <div key={detail.id} className="border border-zinc-800 bg-zinc-950/70 p-4 space-y-3">
+                  <div className="flex justify-between items-start gap-2">
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-wider text-white">{detail.item_name}</p>
+                      <p className="text-[10px] font-semibold text-zinc-500 uppercase mt-0.5">
+                        {new Date(detail.created_at).toLocaleString('id-ID')}
+                      </p>
+                    </div>
+                    <p className="text-xs font-black text-red-400 shrink-0">Rp {formatRupiah(detail.amount)}</p>
+                  </div>
+                  <div className="flex justify-between items-center pt-2 border-t border-zinc-800/80 text-[10px]">
+                    <div className="flex gap-2 items-center text-zinc-400 uppercase font-semibold">
+                      <span>METODE: {detail.payment_method}</span>
+                      {detail.proof_url && (
+                        <>
+                          <span>•</span>
+                          <a
+                            href={detail.proof_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="font-bold text-blue-400 underline uppercase hover:text-blue-300"
+                          >
+                            Lihat Bukti
+                          </a>
+                        </>
+                      )}
+                    </div>
+                    <div className="flex gap-3">
+                      <button onClick={() => handleStartEdit(detail)} className="text-zinc-400 hover:text-white">
+                        <Edit2 size={14} />
+                      </button>
+                      <button onClick={() => handleDeleteDetail(detail.id)} className="text-red-400 hover:text-red-300">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -434,7 +476,7 @@ export default function PembukuanPage() {
                 type="text"
                 value={newMethodName}
                 onChange={(e) => setNewMethodName(e.target.value)}
-                placeholder="* misal: QRIS, Bank Mandiri..."
+                placeholder="misal: QRIS, Bank Mandiri..."
                 className="mt-3 w-full border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-xs font-medium text-white placeholder-zinc-600 outline-none transition focus:border-zinc-500"
               />
               <div className="mt-4 flex justify-end gap-2">
